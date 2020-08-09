@@ -2,6 +2,8 @@ import React,{useEffect,useState} from 'react';
 import { FaCode } from "react-icons/fa";
 import {API_URL,API_KEY,IMAGE_BASE_URL} from "../../Config";
 import MainImage from './Section/MainImage';
+import GridCards from '../commons/GridCards';
+import {Row} from 'antd';
 
 
 function LandingPage() {
@@ -11,15 +13,14 @@ function LandingPage() {
 
 
     useEffect(() => {
-        const endpoint = `${API_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
+        const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
 
         fetch(endpoint)
         .then(res => res.json())
         .then(res => {
             setMovies(res.results)
             setMainMovieImage(res.results[0])
-            console.log(res)
-            console.log(MainMovieImage)
+            console.log(res.results)
         })
         
     }, [])
@@ -40,6 +41,24 @@ function LandingPage() {
 
                 {/* Movie Grid Cards */}
 
+                <Row gutter={[16,16]}>
+                {Movies&&Movies.map((movie, index) =>(
+                    <React.Fragment key={index}>
+                        <GridCards 
+                            image={movie.poster_path ?
+                                `${IMAGE_BASE_URL}w500${movie.poster_path}`:null}
+                            movieId = {movie.id}
+                            movieName = {movie.original_title}
+                        
+                        />
+
+                    </React.Fragment>
+
+                ))}
+
+
+
+                </Row>
             </div>
 
             <div style={{display :'flex', justifyContent : 'center'}}>
